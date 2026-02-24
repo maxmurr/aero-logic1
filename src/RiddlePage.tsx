@@ -15,14 +15,17 @@ export const RiddlePage = () => {
     });
     const [selectedAnswerId, setSelectedAnswerId] = useState<string | null>(null);
     const [verdict, setVerdict] = useState<ExamVerdict | null>(null);
+    const [isChecking, setIsChecking] = useState(false);
 
     const handleAnswerClick = async (answerId: string) => {
         setSelectedAnswerId(answerId);
         setVerdict(null);
+        setIsChecking(true);
 
         const correctAnswer = await fetchCorrectAnswer(riddleId!);
         const result = evaluateAnswer(answerId, correctAnswer.id);
         setVerdict(result);
+        setIsChecking(false);
     };
 
     if (isLoading)
@@ -49,12 +52,15 @@ export const RiddlePage = () => {
             <ul className="flex flex-col gap-3 w-full max-w-md">
                 {data.answers.map((answer) => {
                     const isSelected = selectedAnswerId === answer.id;
-                    const status =
-                        isSelected && verdict
+                    const status = isSelected
+                        ? verdict
                             ? verdict.isCorrect
                                 ? 'correct'
                                 : 'wrong'
-                            : undefined;
+                            : isChecking
+                              ? 'pending'
+                              : undefined
+                        : undefined;
 
                     return (
                         <li key={answer.id}>
@@ -67,9 +73,14 @@ export const RiddlePage = () => {
                                         'bg-green-200 border-green-400':
                                             status === 'correct',
                                         'bg-red-200 border-red-400': status === 'wrong',
+                                        'bg-muted border-primary animate-pulse':
+                                            status === 'pending',
+                                        'opacity-50 cursor-not-allowed':
+                                            isChecking && !isSelected,
                                         'hover:bg-accent': !status,
                                     },
                                 )}
+                                disabled={isChecking}
                                 onClick={() => handleAnswerClick(answer.id)}
                             >
                                 {answer.text}
