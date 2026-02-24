@@ -1,4 +1,5 @@
 import { LandingPage } from './LandingPage';
+import { RiddlePage } from './RiddlePage';
 
 export const routes = [
     {
@@ -10,4 +11,8 @@ export const routes = [
         path: '*',
         element: <main>404: Page not found</main>,
     },
+    {
+        path: '/riddle/:riddleId',
+        element: <RiddlePage />
+    }
 ];
