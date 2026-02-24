@@ -27,5 +27,6 @@ describe('Random riddle', () => {
 
         cy.url().should('include', '/riddle/RIDDLE_ID');
         cy.contains('Random riddle contents').should('be.visible');
+        cy.contains('ANSWER').should('be.visible');
     });
 });

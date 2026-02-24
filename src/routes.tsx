@@ -13,6 +13,6 @@ export const routes = [
     },
     {
         path: '/riddle/:riddleId',
-        element: <RiddlePage />
-    }
+        element: <RiddlePage />,
+    },
 ];

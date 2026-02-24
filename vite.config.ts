@@ -20,6 +20,14 @@ export default defineConfig(({ mode }) => {
             reportsDirectory: 'coverage',
             // globals: true,
             environment: 'node',
+            coverage: {
+                thresholds: {
+                    statements: 80,
+                    branches: 80,
+                    functions: 80,
+                    lines: 80,
+                },
+            },
         },
         define: {
             // 'process.env.API_URL': JSON.stringify(env.API_URL),
