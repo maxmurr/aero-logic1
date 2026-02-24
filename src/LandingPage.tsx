@@ -1,3 +1,5 @@
 export const LandingPage = () => {
-    return <div>Start here...</div>;
+    return <div>
+        <p data-test="work-interval">Work interval</p>
+    </div>;
 };
