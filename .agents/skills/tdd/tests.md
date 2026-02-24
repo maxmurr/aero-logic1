@@ -59,3 +59,33 @@ test("createUser makes user retrievable", async () => {
   expect(retrieved.name).toBe("Alice");
 });
 ```
+
+## Context Matters: Interaction Tests in Outside-In TDD
+
+The "bad test" above is bad in **classical TDD** -- it couples tests to implementation that might change.
+
+In **outside-in TDD**, interaction tests serve a different purpose: they are **design-time contracts** for collaborators that don't exist yet.
+
+```typescript
+// VALID in outside-in: Designing the payment collaborator's interface
+test("checkout delegates payment processing to payment service", async () => {
+  const mockPayment = mock<PaymentService>();
+  mockPayment.process.mockResolvedValue({ status: "ok" });
+  const checkout = new CheckoutFlow(mockPayment);
+
+  await checkout.execute(cart);
+
+  expect(mockPayment.process).toHaveBeenCalledWith(cart.total);
+});
+```
+
+This is valid **only when**:
+- PaymentService doesn't exist yet and you're discovering its interface
+- This is an inner-loop test in a double-loop cycle
+- An outer acceptance test will verify the real integration
+- The mock will be replaced when the real PaymentService is built
+
+Same test is **bad** when:
+- PaymentService already exists and works
+- No acceptance test covers the real integration
+- The mock is permanent

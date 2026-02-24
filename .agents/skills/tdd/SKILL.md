@@ -1,6 +1,6 @@
 ---
 name: tdd
-description: Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions "red-green-refactor", wants integration tests, or asks for test-first development.
+description: Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions "red-green-refactor", wants integration tests, asks for test-first development, mentions outside-in TDD, mockist TDD, London-school TDD, acceptance TDD, or double-loop TDD.
 ---
 
 # Test-Driven Development
@@ -14,6 +14,22 @@ description: Test-driven development with red-green-refactor loop. Use when user
 **Bad tests** are coupled to implementation. They mock internal collaborators, test private methods, or verify through external means (like querying a database directly instead of using the interface). The warning sign: your test breaks when you refactor, but behavior hasn't changed. If you rename an internal function and tests fail, those tests were testing implementation, not behavior.
 
 See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines.
+
+## Choosing Your Approach
+
+Two legitimate TDD styles. Pick one per feature; don't mix mid-feature.
+
+| Signal | Approach | Why |
+|--------|----------|-----|
+| Domain logic, algorithms, data transformations | **Classical (inside-out)** | Behavior is the contract; internals should be free to change |
+| Orchestration layers, UI-to-service wiring, controller logic | **[Outside-in](outside-in.md)** | Discover interfaces between layers by driving from user intent |
+| Integrating with existing deep modules | **Classical** | Modules already have stable interfaces; test through them |
+| Greenfield feature spanning multiple not-yet-existing components | **[Outside-in](outside-in.md)** | Double-loop discovers what components you need |
+| User says "classical", "Detroit", "inside-out" | **Classical** | Explicit request |
+| User says "outside-in", "London", "mockist", "double-loop" | **[Outside-in](outside-in.md)** | Explicit request |
+| Unclear | **Classical** | Safer default; fewer coupling risks |
+
+**Default is classical.** Outside-in requires discipline to replace mocks with real implementations; classical has no such cleanup tax.
 
 ## Anti-Pattern: Horizontal Slices
 
@@ -40,7 +56,7 @@ RIGHT (vertical):
   ...
 ```
 
-## Workflow
+## Workflow (Classical / Inside-Out)
 
 ### 1. Planning
 
@@ -105,3 +121,7 @@ After all tests pass, look for [refactor candidates](refactoring.md):
 [ ] Code is minimal for this test
 [ ] No speculative features added
 ```
+
+---
+
+For outside-in TDD workflow, see [outside-in.md](outside-in.md).
